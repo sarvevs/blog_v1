@@ -25,11 +25,11 @@ Route::group(['namespace' => 'Main'], function () {
     Route::get('/', [\App\Http\Controllers\Main\IndexController::class, '__invoke']);
 });
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function (){
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
     Route::group(['namespace' => 'Main'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Main\IndexController::class, '__invoke']);
     });
-    Route::group(['namespace' => 'Post' , 'prefix' => 'posts'], function () {
+    Route::group(['namespace' => 'Post', 'prefix' => 'posts'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Post\IndexController::class, '__invoke'])->name('admin.post.index');
         Route::get('/create', [\App\Http\Controllers\Admin\Post\CreateController::class, 'create'])->name('admin.post.create');
         Route::post('/', [\App\Http\Controllers\Admin\Post\StoreController::class, 'store'])->name('admin.post.store');
@@ -39,7 +39,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function (){
         Route::delete('/{post}', [\App\Http\Controllers\Admin\Post\DeleteController::class, 'delete'])->name('admin.post.delete');
     });
 
-    Route::group(['namespace' => 'Category' , 'prefix' => 'categories'], function () {
+    Route::group(['namespace' => 'Category', 'prefix' => 'categories'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Category\IndexController::class, '__invoke'])->name('admin.category.index');
         Route::get('/create', [\App\Http\Controllers\Admin\Category\CreateController::class, 'create'])->name('admin.category.create');
         Route::post('/', [\App\Http\Controllers\Admin\Category\StoreController::class, 'store'])->name('admin.category.store');
@@ -49,7 +49,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function (){
         Route::delete('/{category}', [\App\Http\Controllers\Admin\Category\DeleteController::class, 'delete'])->name('admin.category.delete');
     });
 
-    Route::group(['namespace' => 'Tag' , 'prefix' => 'tags'], function () {
+    Route::group(['namespace' => 'Tag', 'prefix' => 'tags'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Tag\IndexController::class, '__invoke'])->name('admin.tag.index');
         Route::get('/create', [\App\Http\Controllers\Admin\Tag\CreateController::class, 'create'])->name('admin.tag.create');
         Route::post('/', [\App\Http\Controllers\Admin\Tag\StoreController::class, 'store'])->name('admin.tag.store');

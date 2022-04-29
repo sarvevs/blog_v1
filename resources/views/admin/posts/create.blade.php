@@ -82,9 +82,7 @@
                                         <select class="select2" name="tag_ids[]" multiple="multiple" data-placeholder="Выберите теги"
                                                 data-dropdown-css-class="select2-purple" style="width: 100%;">
                                             @foreach($tags as $tag)
-                                                <option value="{{ $tag->id }}"
-                                                    {{ $tags->id == old('tag_id') ? ' selected ' : '' }}
-                                                >{{ $tag->title }}</option>
+                                                <option {{ is_array( old('tag_ids')) && in_array($tag->id, old('tag_ids')) ? 'selected' : '' }} value="{{ $tag->id }}">{{ $tag->title }}</option>
                                             @endforeach
                                         </select>
                                     </div>
