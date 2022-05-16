@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -25,9 +25,9 @@ Route::group(['namespace' => 'Main'], function () {
     Route::get('/', [\App\Http\Controllers\Main\IndexController::class, '__invoke']);
 });
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'admin', 'verified']], function () {
     Route::group(['namespace' => 'Main'], function () {
-        Route::get('/', [\App\Http\Controllers\Admin\Main\IndexController::class, '__invoke']);
+        Route::get('/', [\App\Http\Controllers\Admin\Main\IndexController::class, '__invoke'])->name('admin.main.index');
     });
     Route::group(['namespace' => 'Post', 'prefix' => 'posts'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Post\IndexController::class, '__invoke'])->name('admin.post.index');
@@ -58,4 +58,16 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
         Route::post('/{tag}', [\App\Http\Controllers\Admin\Tag\UpdateController::class, 'update'])->name('admin.tag.update');
         Route::delete('/{tag}', [\App\Http\Controllers\Admin\Tag\DeleteController::class, 'delete'])->name('admin.tag.delete');
     });
+
+    Route::group(['namespace' => 'User', 'prefix' => 'users'], function () {
+        Route::get('/', [\App\Http\Controllers\Admin\User\IndexController::class, '__invoke'])->name('admin.user.index');
+        Route::get('/create', [\App\Http\Controllers\Admin\User\CreateController::class, 'create'])->name('admin.user.create');
+        Route::post('/', [\App\Http\Controllers\Admin\User\StoreController::class, 'store'])->name('admin.user.store');
+        Route::get('/{user}', [\App\Http\Controllers\Admin\User\ShowController::class, 'show'])->name('admin.user.show');
+        Route::get('/{user}/edit', [\App\Http\Controllers\Admin\User\EditController::class, 'edit'])->name('admin.user.edit');
+        Route::post('/{user}', [\App\Http\Controllers\Admin\User\UpdateController::class, 'update'])->name('admin.user.update');
+        Route::delete('/{user}', [\App\Http\Controllers\Admin\User\DeleteController::class, 'delete'])->name('admin.user.delete');
+    });
 });
+
+Auth::routes(['verify' => true]);
