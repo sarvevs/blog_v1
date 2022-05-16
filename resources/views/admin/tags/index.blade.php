@@ -11,8 +11,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard v1</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.main.index') }}">Главная</a></li>
+                            <li class="breadcrumb-item active">Теги</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -49,15 +49,15 @@
                                         <td>{{ $tag->id }}</td>
                                         <td>{{ $tag->title }}</td>
                                         <td><a href="{{ route('admin.tag.show', $tag->id) }}"><i
-                                                    class="far fa-eye"></i></a></td>
+                                                        class="far fa-eye"></i></a></td>
                                         <td><a href="{{ route('admin.tag.edit', $tag->id) }}"
                                                class="text-success"><i class="fas fa-pencil-alt"></i></a></td>
                                         <td>
                                             <form action="{{ route('admin.tag.delete', $tag->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" class="border-0 bg-transparent" >
-                                                <i class="fas fa-trash text-danger" role="button"></i>
+                                                <button type="submit" class="border-0 bg-transparent">
+                                                    <i class="fas fa-trash text-danger" role="button"></i>
                                                 </button>
                                             </form>
                                         </td>
