@@ -17,14 +17,51 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes(['verify' => true]);
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['namespace' => 'Main'], function () {
-    Route::get('/', [\App\Http\Controllers\Main\IndexController::class, '__invoke']);
+    Route::get('/', [\App\Http\Controllers\Main\IndexController::class, '__invoke'])->name('main.index');
 });
 
+Route::group(['namespace' => 'Post', 'prefix' => 'posts'], function () {
+    Route::get('/', [\App\Http\Controllers\Post\IndexController::class, '__invoke'])->name('post.index');
+    Route::get('/{post}', [\App\Http\Controllers\Post\ShowController::class, 'show'])->name('post.show');
+
+    Route::group(['namespace' => 'Comment', 'prefix' => '{post}/comments'], function () {
+        Route::post('/', [\App\Http\Controllers\Post\Comment\StoreController::class, 'store'])->name('post.comment.store');
+    });
+
+    Route::group(['namespace' => 'Like', 'prefix' => '{post}/likes'], function () {
+        Route::post('/', [\App\Http\Controllers\Post\Like\StoreController::class, 'store'])->name('post.like.store');
+    });
+});
+
+Route::group(['namespace' => 'Category', 'prefix' => 'categories'], function () {
+    Route::get('/', [\App\Http\Controllers\Category\IndexController::class, '__invoke'])->name('category.index');
+
+    Route::group(['namespace' => 'Post', 'prefix' => '{category}/posts'], function () {
+        Route::get('/', [\App\Http\Controllers\Category\Post\IndexController::class, '__invoke'])->name('category.post.index');
+    });
+});
+
+Route::group(['namespace' => 'Personal', 'prefix' => 'personal', 'middleware' => ['auth', 'verified']], function () {
+    Route::group(['namespace' => 'Main', 'prefix' => 'main'], function () {
+        Route::get('/', [\App\Http\Controllers\Personal\Main\IndexController::class, '__invoke'])->name('personal.main.index');
+    });
+    Route::group(['namespace' => 'Liked', 'prefix' => 'liked'], function () {
+        Route::get('/', [\App\Http\Controllers\Personal\Liked\IndexController::class, '__invoke'])->name('personal.liked.index');
+        Route::delete('/{post}', [\App\Http\Controllers\Personal\Liked\DeleteController::class, '__invoke'])->name('personal.liked.delete');
+    });
+    Route::group(['namespace' => 'Comment', 'prefix' => 'comment'], function () {
+        Route::get('/', [\App\Http\Controllers\Personal\Comment\IndexController::class, '__invoke'])->name('personal.comment.index');
+        Route::get('/{comment}/edit', [\App\Http\Controllers\Personal\Comment\EditController::class, 'edit'])->name('personal.comment.edit');
+        Route::post('/{comment}', [\App\Http\Controllers\Personal\Comment\UpdateController::class, 'update'])->name('personal.comment.update');
+        Route::delete('/{comment}', [\App\Http\Controllers\Personal\Comment\DeleteController::class, 'delete'])->name('personal.comment.delete');
+    });
+});
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'admin', 'verified']], function () {
     Route::group(['namespace' => 'Main'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\Main\IndexController::class, '__invoke'])->name('admin.main.index');
@@ -70,4 +107,3 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
 });
 
-Auth::routes(['verify' => true]);
